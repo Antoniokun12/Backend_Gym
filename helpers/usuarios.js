@@ -7,11 +7,11 @@ const helpersUsuarios={
             throw new Error ("Id de inventario no existe")
         }
     },
-    validarCorreoUnico:async (correo)=>{
-        const existe = await Usuario.findOne({correo})
+    validarCorreoUnico:async (email)=>{
+        const existe = await Usuario.findOne({email})
         console.log(existe);
         if (existe){
-            throw new Error ("correo ya Existe")
+            throw new Error ("El email ya esta en uso")
         }
     },
 }

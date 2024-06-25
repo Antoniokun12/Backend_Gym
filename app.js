@@ -2,9 +2,6 @@ import express from "express";
 import cors from 'cors';
 import dbConexion from "./database/cnxmongoose.js";
 import 'dotenv/config';
-import path from 'path';
-import { fileURLToPath } from 'url'; // Importa fileURLToPath para obtener 
-const __filename = fileURLToPath(import.meta.url);
 import sedes from "./routes/sedes.js";
 import pagos from "./routes/pagos.js";
 import planes from "./routes/planes.js";
@@ -31,14 +28,6 @@ app.use("/api/ventas", ventas)
 app.use("/api/maquinas", maquinas)
 app.use("/api/mantenimientos", mantenimientos)
 app.use("/api/usuarios", usuarios)
-
-const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Redirige todas las solicitudes al frontend
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
 
 app.listen(process.env.PORT, () => {
     console.log(`Servidor escuchando en el puerto ${process.env.PORT}`);

@@ -72,7 +72,7 @@ const httpMaquina = {
     putMaquina: async (req, res) => {
         try {
             const { id } = req.params;
-            const { _id, codigo, estado, ...resto } = req.body;
+            const { _id, estado, ...resto } = req.body;
             const maquina = await Maquina.findByIdAndUpdate(id, resto, { new: true });
             if (!maquina) {
                 return res.status(404).json({ error: "Maquina no encontrada" });

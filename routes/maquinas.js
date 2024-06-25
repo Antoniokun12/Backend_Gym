@@ -38,12 +38,17 @@ router.post("/", [
     check('id_sede', "debe agregar el id de la sede").notEmpty(),
     check('descripcion', "La descripcion no denbe estar vacia").notEmpty(),
     check('fecha_ingreso', "Debe colocar una fecha de ingreso").notEmpty(),
+    check('fecha_ultimo_mantenimiento', "Debe colocar una fecha de ultimo mantenimiento").notEmpty(),
     validarCampos
 ], httpMaquina.postMaquina)
 router.put("/actualizar/:id", [
     validarJWT,
     check('id', 'Se necesita un mongoid valido').isMongoId(),
     check('id').custom(helpersMaquinas.validarExistaId),
+    check('codigo', "El codigo no debe estar vacio").notEmpty(),
+    check('descripcion', "La descripcion no denbe estar vacia").notEmpty(),
+    check('fecha_ingreso', "Debe colocar una fecha de ingreso").notEmpty(),
+    check('fecha_ultimo_mantenimiento', "Debe colocar una fecha de ultimo mantenimiento").notEmpty(),
     validarCampos
 ], httpMaquina.putMaquina)
 router.put("/activar/:id", [

@@ -3,6 +3,8 @@ import cors from 'cors';
 import dbConexion from "./database/cnxmongoose.js";
 import 'dotenv/config';
 import path from 'path';
+import { fileURLToPath } from 'url'; // Importa fileURLToPath para obtener 
+const __filename = fileURLToPath(import.meta.url);
 import sedes from "./routes/sedes.js";
 import pagos from "./routes/pagos.js"
 import planes from "./routes/planes.js";

@@ -6,8 +6,6 @@ dotenv.config(); // Carga las variables de entorno desde el archivo .env
 const dbConexion = async () => {
   try {
     await mongoose.connect(process.env.CNX_MONGO, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
     });
     console.log("Conexión a la base de datos establecida");
   } catch (error) {

@@ -2,6 +2,7 @@ import express from "express";
 import cors from 'cors';
 import dbConexion from "./database/cnxmongoose.js";
 import 'dotenv/config';
+import path from 'path';
 import sedes from "./routes/sedes.js";
 import pagos from "./routes/pagos.js";
 import planes from "./routes/planes.js";
@@ -29,8 +30,12 @@ app.use("/api/maquinas", maquinas)
 app.use("/api/mantenimientos", mantenimientos)
 app.use("/api/usuarios", usuarios)
 
+// Ruta para servir archivos estáticos (ejemplo de un archivo HTML)
+app.use(express.static(path.join(__dirname, "public")));
+
+// Ruta para manejar la solicitud GET a la raíz
 app.get("/", (req, res) => {
-    res.send("¡Bienvenido a la API de mi aplicación!");
+    res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.listen(process.env.PORT, () => {

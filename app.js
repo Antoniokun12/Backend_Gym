@@ -1,7 +1,8 @@
 import express from "express";
-import cors from 'cors'
+import cors from 'cors';
 import dbConexion from "./database/cnxmongoose.js";
 import 'dotenv/config';
+import path from 'path';
 import sedes from "./routes/sedes.js";
 import pagos from "./routes/pagos.js"
 import planes from "./routes/planes.js";

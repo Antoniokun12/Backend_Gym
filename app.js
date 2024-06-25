@@ -29,8 +29,12 @@ app.use("/api/maquinas", maquinas)
 app.use("/api/mantenimientos", mantenimientos)
 app.use("/api/usuarios", usuarios)
 
-app.get('/', (req, res) => {
-    res.send('Bienvenido a la API');
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Redirige todas las solicitudes al frontend
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(process.env.PORT, () => {

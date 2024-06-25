@@ -161,7 +161,7 @@ const httpUsuario = {
             const resetToken = crypto.randomBytes(32).toString('hex');
             const resetPasswordToken = await generarTokenReset(usuario.id, resetToken);
             // const resetLink = `http://localhost:2500/api/usuarios/reset-password/${resetPasswordToken}`;
-            const resetLink = `https://gymappa.netlify.app/reset-password?token=${resetPasswordToken}`;
+            const resetLink = `https://gymappa.netlify.app/#/reset-password?token=${resetPasswordToken}`;
 
             const message = `
                 <h1>Recuperación de Contraseña</h1>

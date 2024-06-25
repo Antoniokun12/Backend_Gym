@@ -29,6 +29,10 @@ app.use("/api/maquinas", maquinas)
 app.use("/api/mantenimientos", mantenimientos)
 app.use("/api/usuarios", usuarios)
 
+app.get('/', (req, res) => {
+    res.send('Bienvenido a la API');
+});
+
 app.listen(process.env.PORT, () => {
     console.log(`Servidor escuchando en el puerto ${process.env.PORT}`);
     dbConexion()

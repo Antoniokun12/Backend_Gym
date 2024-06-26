@@ -11,7 +11,7 @@ const helpersUsuarios={
         const existe = await Usuario.findOne({email})
         console.log(existe);
         if (existe){
-            throw new Error ("El email ya esta en uso")
+            throw new Error ("El email ya esta en uso por favor ingrese otro")
         }
     },
 }

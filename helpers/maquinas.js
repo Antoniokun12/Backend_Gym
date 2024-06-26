@@ -11,7 +11,7 @@ const helpersMaquinas={
     validarCodigoUnico: async (codigo) => {
         const maquina = await Maquina.findOne({ codigo });
         if (maquina) {
-            throw new Error("El código de la máquina ya está en uso");
+            throw new Error("El código de la máquina ya está escriba otro codigo");
         }
     }
     

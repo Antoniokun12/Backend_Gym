@@ -14,7 +14,7 @@ const helpersClientes={
         const existe = await Cliente.findOne({documento})
         console.log(existe);
         if (existe){
-            throw new Error ("Este documento ya esta registrado")
+            throw new Error ("Este documento ya esta registrado no se pudo registrar el cliente")
         }
     },
 

@@ -108,8 +108,8 @@ const httpUsuario = {
     putUsuario: async (req, res) => {
         try {
             const { id } = req.params;
-            const { _id, ...resto } = req.body;
-            const usuario = await Usuario.findByIdAndUpdate(id, resto, { new: true });
+            const { _id, password, ...resto } = req.body;
+            const usuario = await Usuario.findByIdAndUpdate(id, password, resto, { new: true });
             if (!usuario) {
                 return res.status(404).json({ error: "Maquina no encontrada" });
             }

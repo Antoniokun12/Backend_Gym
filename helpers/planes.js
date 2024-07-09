@@ -4,7 +4,7 @@ const helpersPlanes={
         const existe = await Plan.findOne({codigo})
         console.log(existe);
         if (existe){
-            throw new Error ("Codigo de plan ya Existe")
+            throw new Error ("Codigo de plan ya existe, Inserte otro codigo")
         }
     },
     validarExistaId:async (id)=>{

@@ -32,6 +32,7 @@ router.post("/",[
     check('descripcion', "La descripcion no debe estar vacia").notEmpty(),
     check('valor', "El valor no debe estar vacio").notEmpty(),
     check('dias', "El campo dias no debe estar vacio").notEmpty(),
+    validarCampos
 ], httpPlanes.postPlanes)
 router.put("/actualizar/:id",[
     validarJWT,

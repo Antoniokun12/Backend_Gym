@@ -28,11 +28,13 @@ router.get("/:id", [
 router.post("/", [
     validarJWT,
     check('codigo', "El codigo no debe estar vacio").notEmpty(),
+    check('codigo').custom(helpersInventarios.validarCodigoUnico),       
     check('descripcion', "La descripcion no debe estar vacia").notEmpty(),
     check('valorUnitario', "El valor unitario no debe estar vacia").notEmpty(),
     check('valorUnitario', 'Solo numeros').isNumeric(),
     check('cantidad', "La cantidad no debe estar vacia").notEmpty(),
     check('cantidad', 'Solo numeros').isNumeric(),
+    validarCampos
 ], httpInventario.postInventarios)
 router.put("/actualizar/:id", [
     validarJWT,

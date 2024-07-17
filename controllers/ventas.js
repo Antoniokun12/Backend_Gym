@@ -76,34 +76,49 @@ const httpVentas = {
                 return res.status(404).json({ error: "Venta no encontrada" });
             }
     
-            const producto = await Inventario.findOne({ codigo: codigo_producto });
+            const productoAnterior = await Inventario.findOne({ codigo: venta.codigo_producto });
+            const productoNuevo = await Inventario.findOne({ codigo: codigo_producto });
     
-            if (!producto) {
+            if (!productoAnterior || !productoNuevo) {
                 return res.status(404).json({ error: "Producto no encontrado" });
             }
     
-            if (venta.cantidad !== cantidad) {
+            if (venta.codigo_producto !== codigo_producto) {
+
+                productoAnterior.cantidad += venta.cantidad;
+                productoAnterior.valorTotal += venta.total;
                 
-                producto.cantidad += venta.cantidad;
-                producto.valorTotal += venta.total; 
-                
-                if (producto.cantidad < cantidad) {
+                if (productoNuevo.cantidad < cantidad) {
                     return res.status(400).json({ error: "No hay suficiente stock disponible" });
                 }
-              
-                venta.total = producto.valorUnitario * cantidad;
+    
+                venta.total = productoNuevo.valorUnitario * cantidad;
+                venta.cantidad = cantidad;
+                venta.codigo_producto = codigo_producto;
                 
+                productoNuevo.cantidad -= cantidad;
+                productoNuevo.valorTotal -= venta.total;
+    
+               
+                await productoAnterior.save();
+                await productoNuevo.save();
+            } else {
+                
+                venta.total = productoAnterior.valorUnitario * cantidad;
                 venta.cantidad = cantidad;
                 
-                producto.cantidad -= venta.cantidad;
-                producto.valorTotal -= venta.total;
-                await producto.save();
+                productoAnterior.cantidad += venta.cantidad;
+                productoAnterior.valorTotal += venta.total;
+                
+                await productoAnterior.save();
             }
     
+       
             await venta.save();
     
             res.json({ venta });
         } catch (error) {
+            console.error(error);
             res.status(500).json({ error: "Error interno del servidor" });
         }
     },

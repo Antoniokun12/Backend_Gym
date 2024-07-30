@@ -42,10 +42,19 @@ router.post("/", [
     check('descripcion', "Debe agregar las descripcion").notEmpty(),
     check('responsable', "Debe agregar un responsable").notEmpty(),
     check('precio_mantenimiento', "Debe agregar el precio del mantenimiento").notEmpty(),
+    check('precio_mantenimiento', 'Solo numeros').isNumeric(),
+    check('precio_mantenimiento', 'La cantidad debe ser mayor a 0').isFloat({ min: 0.01 }),
     validarCampos
 ], httpMantenimiento.postMantenimiento)
 router.put("/actualizar/:id", [
     validarJWT,
+    check('id_maquina', "Debe agregar una maquina").notEmpty(),
+    check('fecha_mantenimiento', "Debe agregar la fecha del mantenimiento").notEmpty(),
+    check('descripcion', "Debe agregar las descripcion").notEmpty(),
+    check('responsable', "Debe agregar un responsable").notEmpty(),
+    check('precio_mantenimiento', "Debe agregar el precio del mantenimiento").notEmpty(),
+    check('precio_mantenimiento', 'Solo numeros').isNumeric(),
+    check('precio_mantenimiento', 'La cantidad debe ser mayor a 0').isFloat({ min: 0.01 }),
     check('id', 'Se necesita un mongoid valido').isMongoId(),
     check('id').custom(helpersMantenimientos.validarExistaId),
     validarCampos

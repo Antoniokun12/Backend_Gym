@@ -35,6 +35,7 @@ router.post("/",[
     check('horario', "El horario no debe estar vacio").notEmpty(),
     check('ciudad', "La ciudad no debe estar vacia").notEmpty(),
     check('telefono', "El telefono no debe estar vacio").notEmpty(),
+    check('telefono', 'El telefono debe contener solo números').isNumeric(),
     validarCampos
 ], httpSedes.postSedes)
 router.put("/actualizar/:id",[
@@ -45,6 +46,7 @@ router.put("/actualizar/:id",[
     check('horario', "El horario no debe estar vacio").notEmpty(),
     check('ciudad', "La ciudad no debe estar vacia").notEmpty(),
     check('telefono', "El telefono no debe estar vacio").notEmpty(),
+    check('telefono', 'El telefono debe contener solo números').isNumeric(),
     check('id', 'Se necesita un mongoid valido').isMongoId(),
     check('id').custom(helpersSedes.validarExistaId),
     validarCampos

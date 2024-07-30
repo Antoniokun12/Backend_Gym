@@ -3,13 +3,13 @@ import Inventario from "../models/inventario.js";
 
 const httpVentas = {
     getVentas: async (req, res) => {
-        const venta = await Venta.find(); 
+        const venta = await Venta.find().sort({ fecha: -1 });
         res.json({ venta });
     },
 
     getVentasActivos: async (req, res) => {
         try {
-            const ventasActivos = await Venta.find({ estado: 1 });
+            const ventasActivos = await Venta.find({ estado: 1 }).sort({ fecha: -1 });
             res.json({ ventasActivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes activos.' });
@@ -18,7 +18,7 @@ const httpVentas = {
     
     getVentasInactivos: async (req, res) => {
         try {
-            const ventasInactivos = await Venta.find({ estado: 0 });
+            const ventasInactivos = await Venta.find({ estado: 0 }).sort({ fecha: -1 });
             res.json({ ventasInactivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes inactivos.' });
@@ -29,6 +29,35 @@ const httpVentas = {
         const { id } = req.params
         const venta = await Venta.findById(id)
         res.json({ venta })
+    },
+
+    getVentasPorFechaVenta: async (req, res) => {
+        const { fecha } = req.params;
+    
+        try {
+            if (!fecha) {
+                return res.status(400).json({ error: "Fecha es requerida" });
+            }
+    
+            // Convertir la fecha al formato ISO 8601 con la zona horaria UTC
+            const parsedFecha = new Date(fecha + 'T00:00:00Z');
+            if (isNaN(parsedFecha.getTime())) {
+                return res.status(400).json({ error: "Fecha inválida" });
+            }
+    
+            // Definir el rango para la fecha
+            const startOfDay = new Date(parsedFecha.toISOString().split('T')[0] + 'T00:00:00Z');
+            const endOfDay = new Date(parsedFecha.toISOString().split('T')[0] + 'T23:59:59Z');
+    
+            const ventas = await Venta.find({
+                fecha: { $gte: startOfDay, $lt: endOfDay }
+            }).sort({ fecha: -1 });
+    
+            res.json({ ventas });
+        } catch (error) {
+            console.error('Error en getVentasPorFechaVenta:', error);
+            res.status(500).json({ error: error.message });
+        }
     },
 
     postVenta: async (req, res) => {

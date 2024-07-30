@@ -29,7 +29,7 @@ router.get("/:id", [
     check('id').custom(helpersIngresos.validarExistaIngresoId),
     validarCampos
 ], httpIngresos.getIngresosID)
-router.get("/fecha/", [
+router.get("/fecha/:fecha", [
     validarJWT,
     validarCampos
 ], httpIngresos.getIngresofecha)

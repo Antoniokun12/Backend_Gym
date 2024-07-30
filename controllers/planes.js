@@ -3,13 +3,13 @@ import Plan from "../models/planes.js"
 const httpPlanes = {
     
     getPlanes: async (req, res) => {
-        const plan = await Plan.find(); 
+        const plan = await Plan.find().sort({ createAt: -1 });
         res.json({ plan });
     },
 
     getPlanesActivos: async (req, res) => {
         try {
-            const planesActivos = await Plan.find({ estado: 1 });
+            const planesActivos = await Plan.find({ estado: 1 }).sort({ createAt: -1 });
             res.json({ planesActivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes activos.' });
@@ -18,7 +18,7 @@ const httpPlanes = {
     
     getPlanesInactivos: async (req, res) => {
         try {
-            const planesInactivos = await Plan.find({ estado: 0 });
+            const planesInactivos = await Plan.find({ estado: 0 }).sort({ createAt: -1 });
             res.json({ planesInactivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes inactivos.' });

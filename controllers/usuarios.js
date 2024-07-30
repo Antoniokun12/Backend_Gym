@@ -7,7 +7,7 @@ import crypto from 'crypto';
 const httpUsuario = {
     getUsuarios: async (req, res) => {
         try {
-            const usuarios = await Usuario.find();
+            const usuarios = await Usuario.find().sort({ createdAt: -1 });
             res.json({ usuarios });
         } catch (error) {
             console.error(error);
@@ -17,7 +17,7 @@ const httpUsuario = {
 
     getUsuariosActivos: async (req, res) => {
         try {
-            const usuariosActivos = await Usuario.find({ estado: 1 });
+            const usuariosActivos = await Usuario.find({ estado: 1 }).sort({ createdAt: -1 });
             res.json({ usuariosActivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes activos.' });
@@ -26,7 +26,7 @@ const httpUsuario = {
 
     getUsuariosInactivos: async (req, res) => {
         try {
-            const usuariosInactivos = await Usuario.find({ estado: 0 });
+            const usuariosInactivos = await Usuario.find({ estado: 0 }).sort({ createdAt: -1 });
             res.json({ usuariosInactivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes inactivos.' });
@@ -105,19 +105,26 @@ const httpUsuario = {
         }
     },
 
+    
     putUsuario: async (req, res) => {
         try {
             const { id } = req.params;
             const { _id, password, ...resto } = req.body;
-            const usuario = await Usuario.findByIdAndUpdate(id, password, resto, { new: true });
+    
+            // No incluir password en la actualización
+            const usuario = await Usuario.findByIdAndUpdate(id, resto, { new: true });
+    
             if (!usuario) {
-                return res.status(404).json({ error: "Maquina no encontrada" });
+                return res.status(404).json({ error: "Usuario no encontrado" });
             }
+    
             res.json({ usuario });
         } catch (error) {
+            console.error(error); // Registro del error en el servidor
             res.status(500).json({ error: "Error interno del servidor" });
         }
     },
+    
 
     putUsuarioActivar: async (req, res) => {
         try {

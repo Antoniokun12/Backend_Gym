@@ -5,7 +5,8 @@ const httpIngresos = {
     getIngresos: async (req, res) => {
         const ingresos = await Ingreso.find()
             .populate('id_cliente')
-            .populate('id_sede');
+            .populate('id_sede')
+            .sort({ fecha: -1 });
         res.json({ ingresos });
     },
 
@@ -13,7 +14,8 @@ const httpIngresos = {
         try {
             const ingresosActivos = await Ingreso.find({ estado: 1 })
                 .populate('id_cliente')
-                .populate('id_sede');
+                .populate('id_sede')
+                .sort({ fecha: -1 });
             res.json({ ingresosActivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes activos.' });
@@ -24,7 +26,8 @@ const httpIngresos = {
         try {
             const ingresosInactivos = await Ingreso.find({ estado: 0 })
                 .populate('id_cliente')
-                .populate('id_sede');
+                .populate('id_sede')
+                .sort({ fecha: -1 });
             res.json({ ingresosInactivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes inactivos.' });
@@ -51,19 +54,28 @@ const httpIngresos = {
     },
 
     getIngresofecha: async (req, res) => {
-        // const categorias   =  await   Categoria.find()
-        // res.json({categorias})
-        const { busqueda } = req.query
-        const ingresos = await Ingreso.find(
-            {
-                $or: [
-                    { fecha: new RegExp(busqueda, "i") },
-                    // { cedula: new RegExp(busqueda, "i") },
-                    // { email: new RegExp(busqueda, "i") },
-                ]
+        const { fecha } = req.params;
+
+        try {
+            if (!fecha) {
+                return res.status(400).json({ error: "Fecha es requerida" });
             }
-        )
-        res.json({ ingresos })
+
+            const parsedFecha = new Date(fecha);
+            if (isNaN(parsedFecha.getTime())) {
+                return res.status(400).json({ error: "Fecha inválida" });
+            }
+
+            // Consulta para obtener ingresos desde la fecha proporcionada
+            const ingresos = await Ingreso.find({ fecha: { $gte: parsedFecha } })
+                .populate('id_cliente')
+                .populate('id_sede');
+
+            res.json({ ingresos });
+        } catch (error) {
+            console.error('Error en getIngresofecha:', error); // Agregar log de error para depuración
+            res.status(500).json({ error: error.message });
+        }
     },
 
     postIngresos: async (req, res) => {

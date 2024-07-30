@@ -35,8 +35,8 @@ router.post("/", [
     validarJWT,
     check('codigo', "El codigo no debe estar vacio").notEmpty(),
     check('codigo').custom(helpersMaquinas.validarCodigoUnico),
-    check('id_sede', "debe agregar el id de la sede").notEmpty(),
-    check('descripcion', "La descripcion no denbe estar vacia").notEmpty(),
+    check('id_sede', "debe agregar la sede").notEmpty(),
+    check('descripcion', "La descripcion no debe estar vacia").notEmpty(),
     check('fecha_ingreso', "Debe colocar una fecha de ingreso").notEmpty(),
     check('fecha_ultimo_mantenimiento', "Debe colocar una fecha de ultimo mantenimiento").notEmpty(),
     validarCampos

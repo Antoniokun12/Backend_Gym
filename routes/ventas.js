@@ -25,13 +25,23 @@ router.get("/:id", [
     check('id').custom(helpersVentas.validarExistaId),
     validarCampos
 ], httpVentas.getVentaID)
+router.get("/fecha/:fecha", [
+    validarJWT,
+    validarCampos
+], httpVentas.getVentasPorFechaVenta)
 router.post("/", [
     validarJWT,
-    check('codigo_producto', "El codigo no debe estar vacio").notEmpty(),
+    check('codigo_producto', "Debe selecionar el codigo").notEmpty(),
     check('cantidad', "Debe agregar una cantidad").notEmpty(),
+    check('cantidad', 'Solo numeros').isNumeric(),
+    check('cantidad', 'La cantidad debe ser mayor a 0').isFloat({ min: 0.01 }),
+    validarCampos
 ], httpVentas.postVenta)
 router.put("/actualizar/:id", [
     validarJWT,
+    check('codigo_producto', "Debe seleccionar el codigo").notEmpty(),
+    check('cantidad', 'Solo numeros').isNumeric(),
+    check('cantidad', 'La cantidad debe ser mayor a 0').isFloat({ min: 0.01 }),
     check('id', 'Se necesita un mongoid valido').isMongoId(),
     check('id').custom(helpersVentas.validarExistaId),
     validarCampos

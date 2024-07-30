@@ -10,6 +10,7 @@ const usuarioSchema = new mongoose.Schema({
     estado: { type: Number, default: 1 },
     resetPasswordToken: { type: String },
     resetPasswordExpire: { type: Date },
+}, {
+    timestamps: true // Esta opción agrega automáticamente createdAt y updatedAt
 });
-
 export default mongoose.model("Usuario", usuarioSchema);

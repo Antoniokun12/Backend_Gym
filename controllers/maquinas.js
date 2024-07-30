@@ -3,13 +3,13 @@ import Mantenimiento from "../models/mantenimientos.js";
 
 const httpMaquina = {
     getMaquinas: async (req, res) => {
-        const maquinas = await Maquina.find(); 
+        const maquinas = await Maquina.find().sort({ fecha_ingreso: -1 });
         res.json({ maquinas });
     },
 
     getMaquinasActivos: async (req, res) => {
         try {
-            const maquinasActivos = await Maquina.find({ estado: 1 });
+            const maquinasActivos = await Maquina.find({ estado: 1 }).sort({ fecha_ingreso: -1 });
             res.json({ maquinasActivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes activos.' });
@@ -18,7 +18,7 @@ const httpMaquina = {
     
     getMaquinasInactivos: async (req, res) => {
         try {
-            const maquinasInactivos = await Maquina.find({ estado: 0 });
+            const maquinasInactivos = await Maquina.find({ estado: 0 }).sort({ fecha_ingreso: -1 });
             res.json({ maquinasInactivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes inactivos.' });

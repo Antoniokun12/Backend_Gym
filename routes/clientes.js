@@ -56,9 +56,11 @@ router.post("/", [
     // check('fecha_vencimiento', "La fecha de vencimiento no debe estar vacia").notEmpty(),
     // check('fecha_vencimiento', "La fecha no esta en el formato adecuado").isISO8601().toDate(),
     check('documento', "El documento no debe estar vacio").notEmpty(),
+    check('documento', 'El documento debe contener solo números').isNumeric(),
     check('documento').custom(helpersClientes.validarDocumentoUnico),
     check('direccion', "La direccion no debe estar vacia").notEmpty(),
     check('telefono', "El telefono no debe estar vacio").notEmpty(),
+    check('telefono', 'El telefono debe contener solo números').isNumeric(),
     check('objetivo', "El objetivo no debe estar vacio").notEmpty(),
     check('observaciones_limitaciones', "debe agregar observaciones").notEmpty(),
     check('id_plan', "Debe agregar un plan").notEmpty(),
@@ -89,6 +91,8 @@ router.post("/:id/seguimiento", [
 // ], httpClientes.putSeguimientoCliente)
 router.put("/actualizar/:id", [
     validarJWT,
+    check('documento', 'El documento debe contener solo números').isNumeric(),
+    check('telefono', 'El telefono debe contener solo números').isNumeric(),
     check('id', 'Se necesita un mongoid valido').isMongoId(),
     check('id').custom(helpersClientes.validarExistaclienteId),
     validarCampos

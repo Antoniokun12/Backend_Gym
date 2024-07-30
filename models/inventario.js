@@ -6,7 +6,8 @@ const inventarioSchema = new mongoose.Schema({
     valorUnitario: { type: Number, required: true },
     cantidad: { type: Number, required: true },
     valorTotal: { type: Number, default: 0},
-    estado: { type: Number, default: 1}
+    estado: { type: Number, default: 1},
+    createdAt: { type: Date, default: Date.now }
 });
 
 export default mongoose.model("Inventario", inventarioSchema);

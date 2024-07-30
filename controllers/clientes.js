@@ -6,13 +6,13 @@ import Plan from "../models/planes.js"
 
 const httpClientes = {
     getClientes: async (req, res) => {
-        const clientes = await Cliente.find().populate("id_plan");
+        const clientes = await Cliente.find().populate("id_plan").sort({ fecha_ingreso: -1 });
         res.json({ clientes });
     },
 
     getClientesActivos: async (req, res) => {
         try {
-            const clientesActivos = await Cliente.find({ estado: 1 }).populate("id_plan");
+            const clientesActivos = await Cliente.find({ estado: 1 }).populate("id_plan").sort({ fecha_ingreso: -1 });
             res.json({ clientesActivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes activos.' });
@@ -21,7 +21,7 @@ const httpClientes = {
     
     getClientesInactivos: async (req, res) => {
         try {
-            const clientesInactivos = await Cliente.find({ estado: 0 }).populate("id_plan");
+            const clientesInactivos = await Cliente.find({ estado: 0 }).populate("id_plan").sort({ fecha_ingreso: -1 });
             res.json({ clientesInactivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes inactivos.' });

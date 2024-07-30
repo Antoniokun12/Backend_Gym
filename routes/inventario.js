@@ -32,12 +32,22 @@ router.post("/", [
     check('descripcion', "La descripcion no debe estar vacia").notEmpty(),
     check('valorUnitario', "El valor unitario no debe estar vacia").notEmpty(),
     check('valorUnitario', 'Solo numeros').isNumeric(),
+    check('valorUnitario', 'El valor unitario debe ser mayor a 0').isFloat({ min: 0.01 }),
     check('cantidad', "La cantidad no debe estar vacia").notEmpty(),
     check('cantidad', 'Solo numeros').isNumeric(),
+    check('cantidad', 'La cantidad debe ser mayor a 0').isFloat({ min: 0.01 }),
     validarCampos
 ], httpInventario.postInventarios)
 router.put("/actualizar/:id", [
     validarJWT,
+    check('codigo', "El codigo no debe estar vacio").notEmpty(),
+    check('descripcion', "La descripcion no debe estar vacia").notEmpty(),
+    check('valorUnitario', "El valor unitario no debe estar vacia").notEmpty(),
+    check('valorUnitario', 'Solo numeros').isNumeric(),
+    check('valorUnitario', 'El valor unitario debe ser mayor a 0').isFloat({ min: 0.01 }),
+    check('cantidad', "La cantidad no debe estar vacia").notEmpty(),
+    check('cantidad', 'Solo numeros').isNumeric(),
+    check('cantidad', 'La cantidad debe ser mayor a 0').isFloat({ min: 0.01 }),
     check('id', 'Se necesita un mongoid valido').isMongoId(),
     check('id').custom(helpersInventarios.validarExistaId),
     validarCampos

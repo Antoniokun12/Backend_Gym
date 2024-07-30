@@ -4,13 +4,13 @@ import Plan from "../models/planes.js"
 
 const httpPagos = {
     getPagos: async (req, res) => {
-        const pago = await Pago.find();
+        const pago = await Pago.find().sort({ fecha: -1 });
         res.json({ pago });
     },
 
     getPagosActivos: async (req, res) => {
         try {
-            const pagosActivos = await Pago.find({ estado: 1 });
+            const pagosActivos = await Pago.find({ estado: 1 }).sort({ fecha: -1 });
             res.json({ pagosActivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes activos.' });
@@ -19,7 +19,7 @@ const httpPagos = {
     
     getPagosInactivos: async (req, res) => {
         try {
-            const pagosInactivos = await Pago.find({ estado: 0 });
+            const pagosInactivos = await Pago.find({ estado: 0 }).sort({ fecha: -1 });
             res.json({ pagosInactivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes inactivos.' });
@@ -31,6 +31,35 @@ const httpPagos = {
     //     const pagos = await Pago.findById(id);
     //     res.json({ pagos });
     // },
+
+    getPagosPorFecha: async (req, res) => {
+        const { fecha } = req.params;
+    
+        try {
+            if (!fecha) {
+                return res.status(400).json({ error: "Fecha es requerida" });
+            }
+    
+            // Convertir la fecha al formato ISO 8601 con la zona horaria UTC
+            const parsedFecha = new Date(fecha + 'T00:00:00Z');
+            if (isNaN(parsedFecha.getTime())) {
+                return res.status(400).json({ error: "Fecha inválida" });
+            }
+    
+            // Definir el rango para la fecha
+            const startOfDay = new Date(parsedFecha.toISOString().split('T')[0] + 'T00:00:00Z');
+            const endOfDay = new Date(parsedFecha.toISOString().split('T')[0] + 'T23:59:59Z');
+    
+            const pagos = await Pago.find({
+                fecha: { $gte: startOfDay, $lt: endOfDay }
+            }).sort({ fecha: -1 });
+    
+            res.json({ pagos });
+        } catch (error) {
+            console.error('Error en getPagosPorFecha:', error);
+            res.status(500).json({ error: error.message });
+        }
+    },
 
     getTotalPagosEntreFechas: async (req, res) => {
         try {
@@ -161,6 +190,9 @@ const httpPagos = {
                 valor: plan.valor
             });
             await pago.save();
+
+            cliente.estado = 1;
+
     
             // Definir fechaVencimiento como la fecha de vencimiento del cliente
             const fechaVencimiento = new Date(cliente.fecha_vencimiento);

@@ -3,13 +3,13 @@ import Inventario from "../models/inventario.js";
 const httpInventario = {
 
     getInventarios: async (req, res) => {
-        const inventarios = await Inventario.find(); 
+        const inventarios = await Inventario.find().sort({ createdAt: -1 }); 
         res.json({ inventarios });
     },
 
     getInventariosActivos: async (req, res) => {
         try {
-            const inventariosActivos = await Inventario.find({ estado: 1 });
+            const inventariosActivos = await Inventario.find({ estado: 1 }).sort({ createdAt: -1 });
             res.json({ inventariosActivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes activos.' });
@@ -18,7 +18,7 @@ const httpInventario = {
     
     getInventariosInactivos: async (req, res) => {
         try {
-            const inventariosInactivos = await Inventario.find({ estado: 0 });
+            const inventariosInactivos = await Inventario.find({ estado: 0 }).sort({ createdAt: -1 });
             res.json({ inventariosInactivos });
         } catch (error) {
             res.status(500).json({ error: 'Error al obtener los planes inactivos.' });

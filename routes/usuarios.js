@@ -30,10 +30,12 @@ router.post("/", [
     check('sede', "Debe ingresar la sede").notEmpty(),
     check('nombre', "Debe ingresar el nombre").notEmpty(),
     check('email', "Debe ingresar el email").notEmpty(),
+    check('email', "Debe ingresar un correo válido").isEmail(),
     check('email').custom(helpersUsuarios.validarCorreoUnico),
     check('telefono', "Debe ingresar el telefono").notEmpty(),
+    check('telefono', 'El telefono debe contener solo números').isNumeric(),
     check('password', "Debe ingresar la password").notEmpty(),
-    check('email', "Debe ingresar el email").notEmpty(),
+    
     check('rol', "Debe ingresar el rol").notEmpty(),
     validarCampos
 ], httpUsuario.postUsuario)
@@ -44,7 +46,14 @@ router.post("/login", [
 ],httpUsuario.login)
 router.put("/actualizar/:id", [
     validarJWT,
+    check('sede', "Debe ingresar la sede").notEmpty(),
+    check('nombre', "Debe ingresar el nombre").notEmpty(),
+    check('email', "Debe ingresar el email").notEmpty(),
+    check('email', "Debe ingresar un correo válido").isEmail(),
+    check('telefono', "Debe ingresar el telefono").notEmpty(),
+    check('telefono', 'El telefono debe contener solo números').isNumeric(),
     check('id', 'Se necesita un mongoid valido').isMongoId(),
+    check('rol', "Debe ingresar el rol").notEmpty(),
     check('id').custom(helpersUsuarios.validarExistaId),
     validarCampos
 ], httpUsuario.putUsuario)

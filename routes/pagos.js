@@ -24,6 +24,10 @@ router.get("/inactivos", [
 //     check('id').custom(helpersPagos.validarExistaId),
 //     validarCampos
 // ], httpPagos.getPagosID)
+router.get("/fecha/:fecha", [
+    validarJWT,
+    validarCampos
+], httpPagos.getPagosPorFecha);
 router.get("/pagos/entrefechas",[
     validarJWT,
     validarCampos
@@ -40,7 +44,7 @@ router.get("/pagosx/cliente/:id",[
 ], httpPagos.getTotalPagosPorCliente)
 router.post("/",[
     validarJWT,
-    check('id_cliente', "El id_cliente no debe estar vacio").notEmpty(),
+    check('id_cliente', "El Cliente no debe estar vacio").notEmpty(),
     check('id_cliente').custom(helpersPagos.validarExistaclienteId),
     validarCampos
 ], httpPagos.postPagos)

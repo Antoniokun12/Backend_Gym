@@ -49,6 +49,7 @@ router.put("/actualizar/:id", [
     check('descripcion', "La descripcion no denbe estar vacia").notEmpty(),
     check('fecha_ingreso', "Debe colocar una fecha de ingreso").notEmpty(),
     check('fecha_ultimo_mantenimiento', "Debe colocar una fecha de ultimo mantenimiento").notEmpty(),
+    check('codigo').custom((codigo, { req }) => helpersMaquinas.validarCodigoUnico(codigo, req.params.id)),
     validarCampos
 ], httpMaquina.putMaquina)
 router.put("/activar/:id", [

@@ -49,6 +49,7 @@ router.put("/actualizar/:id",[
     check('telefono', 'El telefono debe contener solo números').isNumeric(),
     check('id', 'Se necesita un mongoid valido').isMongoId(),
     check('id').custom(helpersSedes.validarExistaId),
+    check('codigo').custom((codigo, { req }) => helpersSedes.validarCodigoUnico(codigo, req.params.id)),
     validarCampos
 ], httpSedes.putSedes)
 router.put("/activar/:id",[

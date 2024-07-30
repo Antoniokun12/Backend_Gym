@@ -14,6 +14,12 @@ const helpersUsuarios={
             throw new Error ("El email ya esta en uso por favor ingrese otro")
         }
     },
+    validarEmailUnico: async (email = '', id = '') => {
+        const usuario = await Usuario.findOne({ email });
+        if (usuario && usuario._id.toString() !== id) {
+            throw new Error(`El correo ${email} ya está en uso`);
+        }
+    },
 }
 
 export default helpersUsuarios

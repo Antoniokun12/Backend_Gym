@@ -10,11 +10,10 @@ const helpersClientes={
         }
     },
 
-    validarDocumentoUnico:async (documento)=>{
-        const existe = await Cliente.findOne({documento})
-        console.log(existe);
-        if (existe){
-            throw new Error ("Este documento ya esta registrado no se pudo registrar el cliente")
+    validarDocumentoUnico: async (documento, id) => {
+        const cliente = await Cliente.findOne({ documento });
+        if (cliente && cliente._id.toString() !== id) {
+            throw new Error("Este documento ya está registrado");
         }
     },
 

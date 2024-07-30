@@ -50,6 +50,7 @@ router.put("/actualizar/:id", [
     check('cantidad', 'La cantidad debe ser mayor a 0').isFloat({ min: 0.01 }),
     check('id', 'Se necesita un mongoid valido').isMongoId(),
     check('id').custom(helpersInventarios.validarExistaId),
+    check('codigo').custom((codigo, { req }) => helpersInventarios.validarCodigoUnico(codigo, req.params.id)),
     validarCampos
 ], httpInventario.putInventarios)
 router.put("/activar/:id", [

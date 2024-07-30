@@ -1,10 +1,9 @@
 import Plan from "../models/planes.js";
 const helpersPlanes={
-    validarCodigoUnico:async (codigo)=>{
-        const existe = await Plan.findOne({codigo})
-        console.log(existe);
-        if (existe){
-            throw new Error ("Codigo de plan ya existe, Inserte otro codigo")
+    validarCodigoUnico: async (codigo, id) => {
+        const plan = await Plan.findOne({ codigo });
+        if (plan && plan._id.toString() !== id) {
+            throw new Error("El código de plan ya existe");
         }
     },
     validarExistaId:async (id)=>{

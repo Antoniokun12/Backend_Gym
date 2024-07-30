@@ -8,10 +8,10 @@ const helpersMaquinas={
             throw new Error ("Id de inventario no existe")
         }
     },
-    validarCodigoUnico: async (codigo) => {
+    validarCodigoUnico: async (codigo, id) => {
         const maquina = await Maquina.findOne({ codigo });
-        if (maquina) {
-            throw new Error("El código de la máquina ya existe, Inserte otro codigo");
+        if (maquina && maquina._id.toString() !== id) {
+            throw new Error("El código de la máquina ya existe");
         }
     }
     

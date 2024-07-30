@@ -7,11 +7,10 @@ const helpersSedes={
             throw new Error ("Nombre de sede ya Existe")
         }
     },
-    validarCodigoUnico:async (codigo)=>{
-        const existe = await Sede.findOne({codigo})
-        console.log(existe);
-        if (existe){
-            throw new Error ("Este codigo ya Existe")
+    validarCodigoUnico: async (codigo, id) => {
+        const sede = await Sede.findOne({ codigo });
+        if (sede && sede._id.toString() !== id) {
+            throw new Error("Este código ya existe");
         }
     },
     validarExistaId:async (id)=>{

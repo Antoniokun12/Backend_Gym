@@ -95,6 +95,7 @@ router.put("/actualizar/:id", [
     check('telefono', 'El telefono debe contener solo números').isNumeric(),
     check('id', 'Se necesita un mongoid valido').isMongoId(),
     check('id').custom(helpersClientes.validarExistaclienteId),
+    check('documento').custom((documento, { req }) => helpersClientes.validarDocumentoUnico(documento, req.params.id)),
     validarCampos
 ], httpClientes.putClientes)
 router.put("/seguimiento/:id", [

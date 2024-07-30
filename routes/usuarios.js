@@ -55,6 +55,7 @@ router.put("/actualizar/:id", [
     check('id', 'Se necesita un mongoid valido').isMongoId(),
     check('rol', "Debe ingresar el rol").notEmpty(),
     check('id').custom(helpersUsuarios.validarExistaId),
+    check('email').custom((email, { req }) => helpersUsuarios.validarEmailUnico(email, req.params.id)),
     validarCampos
 ], httpUsuario.putUsuario)
 router.put("/activar/:id", [

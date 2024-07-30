@@ -99,6 +99,10 @@ const httpVentas = {
             const { id } = req.params;
             const { codigo_producto, cantidad } = req.body;
     
+            if (cantidad <= 0) {
+                return res.status(400).json({ error: "Cantidad inválida" });
+            }
+    
             const venta = await Venta.findById(id);
     
             if (!venta) {
@@ -112,45 +116,63 @@ const httpVentas = {
                 return res.status(404).json({ error: "Producto no encontrado" });
             }
     
+            // Calcular la diferencia en la cantidad
+            const cantidadAnterior = venta.cantidad;
+            const diferenciaCantidad = cantidad - cantidadAnterior;
+    
             if (venta.codigo_producto !== codigo_producto) {
-
-                productoAnterior.cantidad += venta.cantidad;
+                // Ajustar el inventario del producto anterior
+                productoAnterior.cantidad += cantidadAnterior;
                 productoAnterior.valorTotal += venta.total;
-                
+    
+                // Verificar stock del nuevo producto
                 if (productoNuevo.cantidad < cantidad) {
                     return res.status(400).json({ error: "No hay suficiente stock disponible" });
                 }
     
-                venta.total = productoNuevo.valorUnitario * cantidad;
-                venta.cantidad = cantidad;
-                venta.codigo_producto = codigo_producto;
-                
+                // Ajustar inventario del nuevo producto
                 productoNuevo.cantidad -= cantidad;
-                productoNuevo.valorTotal -= venta.total;
+                productoNuevo.valorTotal -= productoNuevo.valorUnitario * cantidad;
     
-               
                 await productoAnterior.save();
                 await productoNuevo.save();
-            } else {
-                
-                venta.total = productoAnterior.valorUnitario * cantidad;
+    
+                // Actualizar la venta
+                venta.codigo_producto = codigo_producto;
+                venta.valor_unitario = productoNuevo.valorUnitario;
                 venta.cantidad = cantidad;
-                
-                productoAnterior.cantidad += venta.cantidad;
-                productoAnterior.valorTotal += venta.total;
-                
+                venta.total = productoNuevo.valorUnitario * cantidad;
+                await venta.save();
+            } else {
+                // Si el producto no cambia, ajustar el inventario según la diferencia de cantidad
+                if (diferenciaCantidad > 0) {
+                    // Si la nueva cantidad es mayor
+                    if (productoAnterior.cantidad < diferenciaCantidad) {
+                        return res.status(400).json({ error: "No hay suficiente stock disponible" });
+                    }
+                    productoAnterior.cantidad -= diferenciaCantidad;
+                    productoAnterior.valorTotal -= productoAnterior.valorUnitario * diferenciaCantidad;
+                } else if (diferenciaCantidad < 0) {
+                    // Si la nueva cantidad es menor
+                    productoAnterior.cantidad += Math.abs(diferenciaCantidad);
+                    productoAnterior.valorTotal += productoAnterior.valorUnitario * Math.abs(diferenciaCantidad);
+                }
+    
+                // Actualizar la venta
+                venta.cantidad = cantidad;
+                venta.total = productoAnterior.valorUnitario * cantidad;
+                await venta.save();
+    
                 await productoAnterior.save();
             }
-    
-       
-            await venta.save();
     
             res.json({ venta });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ error: "Error interno del servidor" });
+            res.status(500).json({ error: "Error interno del servidor", details: error.message });
         }
     },
+    
     
     putVentaActivar: async (req, res) => {
         const { id } = req.params

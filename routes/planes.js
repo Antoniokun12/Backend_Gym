@@ -42,6 +42,7 @@ router.put("/actualizar/:id",[
     check('dias', "El campo dias no debe estar vacio").notEmpty(),
     check('id', 'Se necesita un mongoid valido').isMongoId(),
     check('id').custom(helpersPlanes.validarExistaId),
+    check('codigo').custom((codigo, { req }) => helpersPlanes.validarCodigoUnico(codigo, req.params.id)),
     validarCampos
 ], httpPlanes.putPlanes)
 router.put("/activar/:id",[

@@ -2,11 +2,10 @@ import Inventario from "../models/inventario.js";
 
 const helpersInventarios={
 
-    validarCodigoUnico:async (codigo)=>{
-        const existe = await Inventario.findOne({codigo})
-        console.log(existe);
-        if (existe){
-            throw new Error ("Codigo de Inventario ya existe, Inserte otro codigo")
+    validarCodigoUnico: async (codigo, id) => {
+        const inventario = await Inventario.findOne({ codigo });
+        if (inventario && inventario._id.toString() !== id) {
+            throw new Error("El código de inventario ya existe");
         }
     },
 
